@@ -15,6 +15,10 @@ This includes features such as authentication and handling of assets and their i
 ### Obfuscation
 This features allows developers to encrypt their strings before shipping and decrypt them at runtime. Simply pass your value and encryption key to receive the encrypted String.
 
+### Security
+This feature guaratees that the library can only be loaded within an Provided environment.
+We highly recommend using this together with string encryption in order to prevent a decryption procedure from third-party.
+
 Please note that the availability of these features may depend on the specific licensing agreement for Provided.
 
 ## Integration

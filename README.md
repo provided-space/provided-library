@@ -2,6 +2,30 @@
 ## About
 The Provided library is a powerful tool designed to provide developers with seamless integration into their projects. It simplifies the process of incorporating various functionalities by offering a range of features tailored to meet the needs of developers.
 
+## Inclusion
+
+### Maven
+1. Add Jitpack as repository to your `pom.xml`
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+2. Add `provided-library` as dependency
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.github.provided-space</groupId>
+        <artifactId>provided-library</artifactId>
+        <version>main-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+
+
 ## Features
 The Provided library comes with a set of features, some of which can be unlocked based on the licensing agreement. The available features include:
 

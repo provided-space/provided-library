@@ -4,7 +4,18 @@ The Provided library is a powerful tool designed to provide developers with seam
 
 ## Inclusion
 
-### Maven
+### Maven via Github Packages
+1. Consult the [Github Docs](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages) on how to authenticate to their package registry.
+2. Add `provided-library` as dependency
+```xml
+<dependency>
+    <groupId>space.provided</groupId>
+    <artifactId>provided-library</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+### Maven via Jitpack
 1. Add Jitpack as repository to your `pom.xml`
 ```xml
 <repositories>

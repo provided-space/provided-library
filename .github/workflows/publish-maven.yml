@@ -1,13 +1,7 @@
 name: Publish GitHub Package
 
 on:
-  push:
-    branches: 
-      - main
-    paths:
-      - 'pom.xml'
-      - '.github/workflows/**'
-      - 'src/**'
+  push: [ tags ]
 
 jobs:
   publish:

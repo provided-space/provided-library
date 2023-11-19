@@ -29,4 +29,14 @@ public class MicrosoftAuthResult {
     public String getRefreshToken() {
         return refreshToken;
     }
+
+    @Override
+    public String toString() {
+        return "MicrosoftAuthResult{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", accessToken='" + accessToken + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                '}';
+    }
 }

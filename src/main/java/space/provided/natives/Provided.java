@@ -3,6 +3,7 @@ package space.provided.natives;
 import space.provided.api.AssetItem;
 import space.provided.api.ApiException;
 import space.provided.api.ProvidedUser;
+import space.provided.api.oauth2.MicrosoftAuthException;
 import space.provided.api.oauth2.MicrosoftAuthResult;
 
 public final class Provided {
@@ -89,5 +90,5 @@ public final class Provided {
 
     public static native double d_e(double n1, double n2);
 
-    public static native MicrosoftAuthResult loginWithMicrosoft();
+    public static native MicrosoftAuthResult loginWithMicrosoft() throws MicrosoftAuthException;
 }

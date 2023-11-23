@@ -21,6 +21,10 @@ This features allows developers to encrypt their strings before shipping and dec
 This feature guaratees that the library can only be loaded within an Provided environment.
 We highly recommend using this together with string encryption in order to prevent a decryption procedure from third-party.
 
+### Microsoft Login
+Enhance your users experience by logging in via Microsoft services and restoring previous sessions with refresh tokens.
+This will spin up a local webserver on the users machine to process the response and provide your software with all required parameters.
+
 Please note that the availability of these features may depend on the specific licensing agreement for Provided.
 
 ## Inclusion
@@ -73,6 +77,7 @@ try {
 }
 ```
 
+### API
 To retrieve a user object for authentication, use the getUser method to return a ProvidedUser object.
 ```java
 try {
@@ -132,15 +137,34 @@ try {
 }
 ```
 
+### Obfuscation
 To encrypt Strings in the bytecode, call encrypt with the value and a random generated String.
 ```java
 /**
  * Allowed key sizes: 16, 24, 32
  */
 final String key = generateEncryptionKey();
-final String encryptedValue = Provided.encrypt(stringLdc.value, key);
+final String encryptedValue = Provided.Obfuscation.encrypt(stringLdc.value, key);
 
-// add method instruction to Provided.decrypt with the encrypted value and generated key as parameter
+// add method instruction to Provided.Obfuscation.decrypt with the encrypted value and generated key as parameter
+```
+
+### Microsoft Login
+To login via Microsoft, you have two options. Either open the login page in the browser and await a redirect to localhost, or use an existing refresh token.
+```java
+try {
+    final MicrosoftAuthResult result = Provided.Microsoft.loginWithMicrosoft();
+    // do something with the result
+} catch (MicrosoftAuthException e) {
+    // Handle exception
+}
+
+try {
+    final MicrosoftAuthResult result = Provided.Microsoft.loginWithToken(refreshToken);
+    // do something with the result
+} catch (MicrosoftAuthException e) {
+    // Handle exception
+}
 ```
 
 Please make sure to handle any exceptions that may be thrown by the library methods and provide appropriate error handling and feedback to the users of your application.

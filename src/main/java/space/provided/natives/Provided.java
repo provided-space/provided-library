@@ -14,6 +14,8 @@ public final class Provided {
 
     public static native void initialize(String payload, String signature) throws InitializationException;
 
+    public static native void uninitialize();
+
     public static native ProvidedUser getUser() throws ApiException;
 
     public static native ProvidedUser redeemToken(String token) throws ApiException;

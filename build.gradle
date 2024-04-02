@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'space.provided'
+version = '1.1.2'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url = 'https://registry.provided.space'
+            credentials {
+                username = System.getenv('REGISTRY_USERNAME')
+                password = System.getenv('REGISTRY_PASSWORD')
+            }
+        }
+    }
+}

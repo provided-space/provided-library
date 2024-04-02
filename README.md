@@ -29,34 +29,32 @@ Please note that the availability of these features may depend on the specific l
 
 ## Inclusion
 
-### Maven via Github Packages
-1. Consult the [Github Docs](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages) on how to authenticate to their package registry.
-2. Add `provided-library` as dependency
-```xml
-<dependency>
-    <groupId>space.provided</groupId>
-    <artifactId>provided-library</artifactId>
-    <version>1.0.0</version>
-</dependency>
+### Gradle
+```groovy
+repositories {
+    maven { url 'https://registry.provided.space' }
+}
+
+dependencies {
+    implementation 'space.provided:event-system:VERSION'
+}
 ```
 
-### Maven via Jitpack
-1. Add Jitpack as repository to your `pom.xml`
+### Maven
 ```xml
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <id>provided</id>
+        <name>provided.space</name>
+        <url>https://registry.provided.space</url>
     </repository>
 </repositories>
-```
-2. Add `provided-library` as dependency
-```xml
+
 <dependencies>
     <dependency>
-        <groupId>com.github.provided-space</groupId>
-        <artifactId>provided-library</artifactId>
-        <version>main-SNAPSHOT</version>
+        <groupId>space.provided</groupId>
+        <artifactId>event-system</artifactId>
+        <version>VERSION</version>
     </dependency>
 </dependencies>
 ```

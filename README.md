@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.provided:event-system:VERSION'
+    implementation 'space.provided:provided-library:VERSION'
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 <dependencies>
     <dependency>
         <groupId>space.provided</groupId>
-        <artifactId>event-system</artifactId>
+        <artifactId>provided-library</artifactId>
         <version>VERSION</version>
     </dependency>
 </dependencies>

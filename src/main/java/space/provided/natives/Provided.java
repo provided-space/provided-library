@@ -8,8 +8,9 @@ import space.provided.api.oauth2.MicrosoftAuthResult;
 
 public final class Provided {
 
-    static {
-        System.loadLibrary("provided");
+    public static void loadAndInitialize(String payload, String signature) throws InitializationException {
+        System.load("provided");
+        initialize(payload, signature);
     }
 
     public static native void initialize(String payload, String signature) throws InitializationException;

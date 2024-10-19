@@ -9,7 +9,7 @@ import space.provided.api.oauth2.MicrosoftAuthResult;
 public final class Provided {
 
     public static void loadAndInitialize(String payload, String signature) throws InitializationException {
-        System.load("provided");
+        System.loadLibrary("provided");
         initialize(payload, signature);
     }
 

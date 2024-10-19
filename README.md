@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.provided:provided-library:1.3.0'
+    implementation 'space.provided:provided-library:1.3.1'
 }
 ```
 
@@ -54,7 +54,7 @@ dependencies {
     <dependency>
         <groupId>space.provided</groupId>
         <artifactId>provided-library</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.1</version>
     </dependency>
 </dependencies>
 ```

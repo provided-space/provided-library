@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'space.provided:provided-library:VERSION'
+    implementation 'space.provided:provided-library:1.3.0'
 }
 ```
 
@@ -54,7 +54,7 @@ dependencies {
     <dependency>
         <groupId>space.provided</groupId>
         <artifactId>provided-library</artifactId>
-        <version>VERSION</version>
+        <version>1.3.0</version>
     </dependency>
 </dependencies>
 ```
@@ -69,7 +69,8 @@ Initialize the library by calling the initialize method. This method loads the l
 * If the payload is invalid or its integrity cannot be guaranteed, this method will throw an InitializationException
 ```java
 try {
-    Provided.initialize(payload, signature);
+    // Or just Provided.initialize(payload, signature); if you load the dll by yourself.
+    Provided.loadAndInitialize(payload, signature);
 } catch (InitializationException e) {
     // Handle initialization exception
 }

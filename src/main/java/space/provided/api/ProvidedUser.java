@@ -20,6 +20,11 @@ public final class ProvidedUser {
         return rankId;
     }
 
+    /**
+     * @return Encoded and signed payload which can be used to validate the integrity of the provided data. The Payload
+     * can be used to serialize a ProvidedUser instance later on to allow for an offline login. See the full example
+     * in the README for checking for expiration.
+     */
     public String getIntegrity() {
         return integrity;
     }

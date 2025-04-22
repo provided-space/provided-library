@@ -4,6 +4,17 @@
 ## About
 The Provided library is a powerful tool designed to provide developers with seamless integration into their projects. It simplifies the process of incorporating various functionalities by offering a range of features tailored to meet the needs of developers.
 
+## Add dependency
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.provided-space:provided-library:v1.3.1'
+}
+```
+
 ## Features
 The Provided library comes with a set of features, some of which can be unlocked based on the licensing agreement. The available features include:
 
@@ -18,7 +29,7 @@ This includes features such as authentication and handling of assets and their i
 This features allows developers to encrypt their strings before shipping and decrypt them at runtime. Simply pass your value and encryption key to receive the encrypted String.
 
 ### Security
-This feature guaratees that the library can only be loaded within an Provided environment.
+This feature guarantees that the library can only be loaded within a Provided environment.
 We highly recommend using this together with string encryption in order to prevent a decryption procedure from third-party.
 
 ### Microsoft Login
@@ -27,143 +38,116 @@ This will spin up a local webserver on the users machine to process the response
 
 Please note that the availability of these features may depend on the specific licensing agreement for Provided.
 
-## Inclusion
-
-### Gradle
-```groovy
-repositories {
-    maven { url 'https://registry.provided.space' }
-}
-
-dependencies {
-    implementation 'space.provided:provided-library:1.3.1'
-}
-```
-
-### Maven
-```xml
-<repositories>
-    <repository>
-        <id>provided</id>
-        <name>provided.space</name>
-        <url>https://registry.provided.space</url>
-    </repository>
-</repositories>
-
-<dependencies>
-    <dependency>
-        <groupId>space.provided</groupId>
-        <artifactId>provided-library</artifactId>
-        <version>1.3.1</version>
-    </dependency>
-</dependencies>
-```
-
 ## Integration
-To integrate the library into your application, make sure that the binary is present in `java.library.path`.
-For applications running in the Provided launcher, this is already ensured.
+The payload and signature to initialize the library, will be provided to you by the administrators of provided.space.
+If you choose to have an expiry date set per payload, then it is your responsibility to request a new payload and signature on time.
 
-Initialize the library by calling the initialize method. This method loads the library and performs necessary initialization steps. It takes two parameters: payload and signature.
-* Both of these values will be given to you by the libraries maintainers.
-* Only subscribed features can be called through the api.
-* If the payload is invalid or its integrity cannot be guaranteed, this method will throw an InitializationException
-```java
-try {
-    // Or just Provided.initialize(payload, signature); if you load the dll by yourself.
-    Provided.loadAndInitialize(payload, signature);
-} catch (InitializationException e) {
-    // Handle initialization exception
-}
-```
+Make sure to handle the exceptions thrown by the library methods appropriately and give your users meaningful feedback to optimize their experience.
 
-### API
-To retrieve a user object for authentication, use the getUser method to return a ProvidedUser object.
 ```java
-try {
-    final ProvidedUser user = Provided.getUser();
-    // Use the user object for further processing
-} catch (ApiException e) {
-    // Handle exception
-}
-```
+package space.provided.sample;
 
-To redeem a token for a user, use the redeemToken method. It takes a token parameter and returns a ProvidedUser object.
-```java
-try {
-    final ProvidedUser user = Provided.redeemToken(token);
-    // Use the user object for further processing
-} catch (ApiException e) {
-    // Handle exception
-}
-```
+import org.json.JSONObject;
+import space.provided.api.ApiException;
+import space.provided.api.ProvidedUser;
+import space.provided.natives.Provided;
 
-To get an array of asset items for a given asset ID, use the getAssetItems method. It takes an assetId parameter and returns an array of AssetItem objects.
-```java
-try {
-    final AssetItem[] assetItems = Provided.getAssetItems(assetId);
-    // Process the asset items as needed
-} catch (ApiException e) {
-    // Handle exception
-}
-```
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.time.Instant;
+import java.util.Base64;
 
-To get the contents of an asset item by its item ID, use the getAssetItemContents method. It takes an itemId parameter and returns the contents as a string.
-```java
-try {
-    final String assetItemContents = Provided.getAssetItemContents(itemId);
-    // Process the asset item contents as needed
-} catch (ApiException e) {
-    // Handle exception
-}
-```
-
-To upload contents for an asset item, call uploadAssetItem along with the ID of the asset, item name and contents.
-```java
-try {
-    final AssetItem uploadedAssetItem = Provided.uploadAssetItem(assetId, name, contents);
-    // Process the uploaded asset item as needed
-} catch (ApiException e) {
-    // Handle exception
-}
-```
-
-To delete an asset item, call deleteAssetItem along with the item ID.
-```java
-try {
-    Provided.deleteAssetItem(itemId);
-} catch (ApiException e) {
-    // Handle exception
-}
-```
-
-### Obfuscation
-To encrypt Strings in the bytecode, call encrypt with the value and a random generated String.
-```java
 /**
- * Allowed key sizes: 16, 24, 32
+ * Copy this functionality into your application where needed and change all dynamic data (app name constant, payload and signature).
  */
-final String key = generateEncryptionKey();
-final String encryptedValue = Provided.Obfuscation.encrypt(stringLdc.value, key);
+public final class ProvidedExample {
 
-// add method instruction to Provided.Obfuscation.decrypt with the encrypted value and generated key as parameter
-```
+    private static final String APPLICATION_NAME = "sample";
+    private static final Signature VERIFIER;
 
-### Microsoft Login
-To login via Microsoft, you have two options. Either open the login page in the browser and await a redirect to localhost, or use an existing refresh token.
-```java
-try {
-    final MicrosoftAuthResult result = Provided.Microsoft.loginWithMicrosoft();
-    // do something with the result
-} catch (MicrosoftAuthException e) {
-    // Handle exception
+    static {
+        final byte[] publicKey = Base64.getDecoder().decode("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0MABmJAqZciwuXDpOnBFDpd0AGBalvHFTT8sGk2PkQUysRcCBm5LPrHAzR8fZccqiYGVnQhnp/EHiTleDIjuiuV/bTksXdjcnYlokoJ+n1mze+tpOtnFhBgMExp9TdEt85Nue/Ai/OSkQ/goOq+Xohv1j7kvlS3J5cUYhbBOi2rGXkhSXozqVScHIoHUaA9+MFhw3iu3OC2jBoQvy8EWhJOShWvgsJZvZl/bW1jsJzWfpLHXPXU/6HdWQQ2GGZKrJ0gT3/V0F1z8Hvmq7jADceYFiU/eIkHsnaPdLKuSCaf7KicpduXoRs38r4bujUmbjO4zH5AeCM4RUD84uMh9ZQIDAQAB");
+        try {
+            VERIFIER = Signature.getInstance("SHA256withRSA");
+            VERIFIER.initVerify(KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKey)));
+        } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) throws SignatureException {
+        loadAndInitialize("...", "...");
+
+        try {
+            final ProvidedUser user = Provided.getUser();
+            validateIntegrity(user.getIntegrity());
+        } catch (ApiException e) {
+            final ProvidedUser user = Provided.redeemToken("...");
+            validateIntegrity(user.getIntegrity());
+        }
+    }
+
+    private static void loadAndInitialize(String payload, String signature) {
+        final String libraryName = "provided.dll";
+        final String expectedChecksum = "ee7b24828e48c3e261597bb7da8e4e53aa29692ef4a1499def293b0f8e31359b";
+
+        try {
+            final InputStream inputStream = ProvidedExample.class.getClassLoader().getResourceAsStream(libraryName);
+            if (inputStream == null) {
+                throw new IllegalStateException("Missing %1$s as resource.".formatted(libraryName));
+            }
+
+            final byte[] libraryBytes = inputStream.readAllBytes();
+            inputStream.close();
+
+            final byte[] hash = MessageDigest.getInstance("SHA-256").digest(libraryBytes);
+            final String checksum = "%064x".formatted(new BigInteger(1, hash));
+            if (!checksum.equals(expectedChecksum)) {
+                throw new IllegalStateException("Checksum for %1$s does not match expectation.".formatted(libraryName));
+            }
+
+            final Path nativesDirectory = Path.of(System.getenv("APPDATA"), "Provided", "applications", APPLICATION_NAME, "natives");
+            Files.createDirectories(nativesDirectory);
+
+            final Path path = nativesDirectory.resolve(libraryName);
+            Files.write(path, libraryBytes);
+            System.load(path.toAbsolutePath().toString());
+            Provided.initialize(payload, signature);
+        } catch (IOException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void validateIntegrity(String integrity) throws SignatureException, SecurityException {
+        final String[] parts = integrity.split("\\.");
+        if (parts.length < 2) {
+            throw new IllegalStateException("Insufficient amount of arguments to validate integrity.");
+        }
+
+        final byte[] payload = parts[0].getBytes(StandardCharsets.UTF_8);
+        final byte[] signature = Base64.getDecoder().decode(parts[1]);
+        VERIFIER.update(payload);
+        if (!VERIFIER.verify(signature)) {
+            throw new SecurityException("Integrity couldn't be verified due to invalid signature.");
+        }
+
+        final long timestamp = Instant.now().getEpochSecond();
+        final JSONObject data = new JSONObject(new String(Base64.getDecoder().decode(payload)));
+        if (!data.has("revalidate") || data.getLong("revalidate") < timestamp) {
+            throw new RuntimeException("Integrity token has expired, please login again.");
+        }
+
+        // optionally check for a difference between iat (issued at) and timestamp lower than a certain threshold value.
+        if (!data.has("iat") || data.getLong("iat") > timestamp) {
+            throw new RuntimeException("Integrity token has been issued out of valid range, please check your system time and login again.");
+        }
+    }
 }
-
-try {
-    final MicrosoftAuthResult result = Provided.Microsoft.loginWithToken(refreshToken);
-    // do something with the result
-} catch (MicrosoftAuthException e) {
-    // Handle exception
-}
 ```
-
-Please make sure to handle any exceptions that may be thrown by the library methods and provide appropriate error handling and feedback to the users of your application.

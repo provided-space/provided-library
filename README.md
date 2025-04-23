@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.provided-space:provided-library:v1.3.1'
+    implementation 'com.github.provided-space:provided-library:v1.3.2'
 }
 ```
 
@@ -96,7 +96,7 @@ public final class ProvidedExample {
 
     private static void loadAndInitialize(String payload, String signature) {
         final String libraryName = "provided.dll";
-        final String expectedChecksum = "ee7b24828e48c3e261597bb7da8e4e53aa29692ef4a1499def293b0f8e31359b";
+        final String expectedChecksum = "5b02698100143be3df0ea111512bcc491aeeb5dd472d4987f855eca88381f631";
 
         try {
             final InputStream inputStream = ProvidedExample.class.getClassLoader().getResourceAsStream(libraryName);
